@@ -47,6 +47,7 @@ void test_ret_code_check_output()
 }
 
 int main() {
+  assert(false);
   test_ret_code();
 #ifndef __USING_WINDOWS__
   test_ret_code_comm();
