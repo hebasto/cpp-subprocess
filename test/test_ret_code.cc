@@ -3,7 +3,7 @@
 
 namespace sp = subprocess;
 
-void test_ret_code()
+void test_poll_ret_code()
 {
   std::cout << "Test::test_poll_ret_code" << std::endl;
 #ifdef __USING_WINDOWS__
@@ -19,6 +19,18 @@ void test_ret_code()
 #endif
   }
   assert (p.retcode() == 1);
+}
+
+void test_wait_ret_code()
+{
+  std::cout << "Test::test_wait_ret_code" << std::endl;
+#ifdef __USING_WINDOWS__
+  auto p = sp::Popen({"cmd.exe", "/c", "exit", "1"});
+#else
+  auto p = sp::Popen({"/usr/bin/false"});
+#endif
+  int ret{p.wait()};
+  assert(ret == 1);
 }
 
 void test_ret_code_comm()
@@ -49,7 +61,8 @@ void test_ret_code_check_output()
 }
 
 int main() {
-  test_ret_code();
+  test_poll_ret_code();
+  test_wait_ret_code();
 #ifndef __USING_WINDOWS__
   test_ret_code_comm();
   test_ret_code_check_output();
