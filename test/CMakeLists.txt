@@ -5,6 +5,9 @@ set(test_files env_script.sh write_err.sh write_err.txt)
 foreach(test_name IN LISTS test_names)
     add_executable(${test_name} ${test_name}.cc)
     target_link_libraries(${test_name} PRIVATE subprocess)
+    if("${CMAKE_CXX_PLATFORM_ID}" MATCHES "MinGW")  # For CMake >=3.2, might be replaced with the MINGW variable.
+        target_link_options(${test_name} PRIVATE -static)
+    endif()
 
     add_test(
         NAME ${test_name}
