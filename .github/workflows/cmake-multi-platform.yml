@@ -76,5 +76,9 @@ jobs:
     - run: |
         python --version
         python3 --version
+        dir
+        dir build
+        dir build\test
+        dir build\test\${{ matrix.build_type }}
         build\test\${{ matrix.build_type }}\test_redirection.exe
       if: ${{ matrix.os == 'windows-latest' }}
