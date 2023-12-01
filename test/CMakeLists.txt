@@ -1,5 +1,5 @@
-set(test_names test_subprocess test_cat test_env test_err_redirection test_split test_main test_ret_code)
-set(test_files env_script.sh write_err.sh write_err.txt)
+set(test_names test_subprocess test_cat test_env test_err_redirection test_redirection test_split test_main test_ret_code)
+set(test_files env_script.sh write_err.sh write_err.txt test_redirection.py)
 
 
 foreach(test_name IN LISTS test_names)
