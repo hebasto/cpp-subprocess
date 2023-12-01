@@ -31,9 +31,11 @@ jobs:
           - os: ubuntu-latest
             c_compiler: gcc
             cxx_compiler: g++
+            cxx_flags: '-Wextra -Werror'
           - os: ubuntu-latest
             c_compiler: clang
             cxx_compiler: clang++
+            cxx_flags: '-Wextra -Wno-unused-parameter -Werror'
         exclude:
           - os: windows-latest
             c_compiler: gcc
@@ -58,6 +60,7 @@ jobs:
       run: >
         cmake -B ${{ steps.strings.outputs.build-output-dir }}
         -DCMAKE_CXX_COMPILER=${{ matrix.cxx_compiler }}
+        -DCMAKE_CXX_FLAGS=${{ matrix.cxx_flags }}
         -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
         -DSUBPROCESS_TESTS=ON
