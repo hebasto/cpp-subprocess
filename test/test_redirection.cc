@@ -15,7 +15,11 @@ void test_redirection(const std::string& command)
 }
 
 int main(int argc, char* argv[]) {
-  std::string command = "python3 " + std::string(argv[0]) + ".py";
+  std::string path{argv[0]};
+  if (path.size() >= 4 && path.substr(path.size() - 4) == ".exe") {
+      path.resize(path.size() - 4);
+  }
+  std::string command = "python3 " + path + ".py";
   test_redirection(command);
   return 0;
 }
