@@ -1,17 +1,23 @@
+#include <subprocess.hpp>
+
 #include <cstdlib>
 #include <string>
 #include <tuple>
-#include <subprocess.hpp>
 
 using namespace subprocess;
 
 int main() {
   auto p = Popen("python3 @TEST_REDIRECTION_PYTHON_SCRIPT_PATH@", output{PIPE}, error{PIPE});
-  OutBuffer out;
-  ErrBuffer err;
-  std::tie(out, err) = p.communicate();
-  std::cout << out.buf.data() << std::endl;
-  std::cout << "=================================" << std::endl;
-  std::cout << err.buf.data() << std::endl;
-  return 0;
+  OutBuffer out_buf;
+  ErrBuffer err_buf;
+  std::tie(out_buf, err_buf) = p.communicate();
+  std::string out{out_buf.buf.data()};
+  std::string err{err_buf.buf.data()};
+
+  if (out.find("Hello message.") == std::string::npos) return EXIT_FAILURE;
+  if (err.find("Hello message.") != std::string::npos) return EXIT_FAILURE;
+  if (out.find("Error report.") != std::string::npos) return EXIT_FAILURE;
+  if (err.find("Error report.") == std::string::npos) return EXIT_FAILURE;
+
+  return EXIT_SUCCESS;
 }
