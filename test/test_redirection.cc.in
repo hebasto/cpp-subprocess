@@ -1,0 +1,20 @@
+#include <string>
+#include <tuple>
+#include <subprocess.hpp>
+
+using namespace subprocess;
+
+void test_redirection()
+{
+  auto p = Popen("python3 @TEST_REDIRECTION_PYTHON_SCRIPT_PATH@", output{PIPE}, error{PIPE});
+  OutBuffer out;
+  ErrBuffer err;
+  std::tie(out, err) = p.communicate();
+  std::cout << out.buf.data() << std::endl;
+  std::cout << err.buf.data() << std::endl;
+}
+
+int main(int argc, char* argv[]) {
+  test_redirection();
+  return 0;
+}
