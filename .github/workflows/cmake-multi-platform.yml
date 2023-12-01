@@ -32,10 +32,13 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Set compiler
+    - name: Set compiler and build type
       if: ${{ matrix.conf.os == 'ubuntu-latest' }}
+      # `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
+      # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html
       run: |
         echo "CXX=${{ matrix.conf.compiler }}" >> "$GITHUB_ENV"
+        echo "CMAKE_BUILD_TYPE=${{ matrix.build_type }}" >> "$GITHUB_ENV"
 
     - name: Set reusable strings
       # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
@@ -45,11 +48,9 @@ jobs:
         echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
 
     - name: Configure CMake
-      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
-      # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
+      # Configure CMake in a 'build' subdirectory.
       run: >
         cmake -B ${{ steps.strings.outputs.build-output-dir }}
-        -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
         -DSUBPROCESS_TESTS=ON
         -S ${{ github.workspace }}
 
