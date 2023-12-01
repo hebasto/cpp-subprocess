@@ -6,7 +6,7 @@ using namespace subprocess;
 
 void test_redirection(const std::string& command)
 {
-  auto p = Popen(command, output{PIPE}, error{PIPE});
+  auto p = Popen("python3", command, output{PIPE}, error{PIPE});
   OutBuffer out;
   ErrBuffer err;
   std::tie(out, err) = p.communicate();
