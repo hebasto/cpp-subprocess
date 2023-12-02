@@ -61,7 +61,7 @@ Documentation for C++ subprocessing libraray.
 
 extern "C" {
 #ifdef __USING_WINDOWS__
-  #include <Windows.h>
+  #include <windows.h>
   #include <io.h>
   #include <cwchar>
 
@@ -155,7 +155,7 @@ public:
 //--------------------------------------------------------------------
 
 //Environment Variable types
-#ifndef _MSC_VER
+#ifndef __USING_WINDOWS__
 	using env_string_t = std::string;
 	using env_char_t = char;
 #else
@@ -184,7 +184,7 @@ namespace util
     //
 
     if (force == false && argument.empty() == false &&
-        argument.find_first_of(L" \t\n\v\"") == argument.npos) {
+        argument.find_first_of(L" \t\n\v") == argument.npos) {
       command_line.append(argument);
     }
     else {
@@ -1058,6 +1058,7 @@ class Communication
 public:
   Communication(Streams* stream): stream_(stream)
   {}
+  Communication(const Communication&) = default;
   void operator=(const Communication&) = delete;
 public:
   int send(const char* msg, size_t length);
@@ -1095,6 +1096,7 @@ class Streams
 {
 public:
   Streams():comm_(this) {}
+  Streams(const Streams&) = default;
   void operator=(const Streams&) = delete;
 
 public:
