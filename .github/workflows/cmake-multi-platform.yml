@@ -58,6 +58,9 @@ jobs:
         echo =====================================================================================
         ls -l /usr/bin/wine*
         wineboot
+        echo =====================================================================================
+        sudo systemctl restart systemd-binfmt.service
+        systemctl status systemd-binfmt.service
 
     - name: Set reusable strings
       # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
