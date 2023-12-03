@@ -81,8 +81,8 @@ jobs:
       run: |
         file ./test/test_ret_code.exe
         echo =====================================================
-        wine ./test/test_ret_code.exe
-        echo =====================================================
+        # wine ./test/test_ret_code.exe
+        # echo =====================================================
         wine64 ./test/test_ret_code.exe
         echo =====================================================
         ./test/test_ret_code.exe
