@@ -46,9 +46,12 @@ jobs:
     - name: Set cross-compiling toolchain
       if: ${{ matrix.conf.compiler == 'x86_64-w64-mingw32-g++-posix' }}
       run: |
+        sudo dpkg --add-architecture i386
         sudo apt update
         sudo apt install --no-install-recommends g++-mingw-w64-x86-64-posix wine-binfmt
         sudo systemctl start systemd-binfmt.service
+        echo ==================================================================================
+        sudo systemctl status systemd-binfmt.service
         echo "EXTRA_CMAKE_OPTIONS=-DCMAKE_SYSTEM_NAME=Windows -DCMAKE_EXE_LINKER_FLAGS=-static" >> "$GITHUB_ENV"
 
     - name: Set reusable strings
