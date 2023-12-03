@@ -47,8 +47,8 @@ jobs:
       if: ${{ matrix.conf.compiler == 'x86_64-w64-mingw32-g++-posix' }}
       run: |
         sudo dpkg --add-architecture i386
-        sudo apt update
-        sudo apt install --no-install-recommends g++-mingw-w64-x86-64-posix wine-binfmt
+        sudo apt-get update
+        sudo apt-get install --no-install-recommends g++-mingw-w64-x86-64-posix wine-binfmt wine32
         sudo systemctl start systemd-binfmt.service
         echo ==================================================================================
         sudo systemctl status systemd-binfmt.service
