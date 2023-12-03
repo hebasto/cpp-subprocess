@@ -48,6 +48,7 @@ jobs:
       run: |
         sudo apt update
         sudo apt install --no-install-recommends g++-mingw-w64-x86-64-posix wine-binfmt
+        sudo systemctl start systemd-binfmt.service
         echo "EXTRA_CMAKE_OPTIONS=-DCMAKE_SYSTEM_NAME=Windows -DCMAKE_EXE_LINKER_FLAGS=-static" >> "$GITHUB_ENV"
 
     - name: Set reusable strings
