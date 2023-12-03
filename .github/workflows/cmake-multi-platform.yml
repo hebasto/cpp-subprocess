@@ -46,9 +46,8 @@ jobs:
     - name: Set cross-compiling toolchain
       if: ${{ matrix.conf.compiler == 'x86_64-w64-mingw32-g++-posix' }}
       run: |
-        sudo dpkg --add-architecture i386
         sudo apt-get update
-        sudo apt-get install --no-install-recommends g++-mingw-w64-x86-64-posix wine-binfmt win32
+        sudo apt-get install --no-install-recommends g++-mingw-w64-x86-64-posix wine-binfmt
         sudo systemctl start systemd-binfmt.service
         echo ==================================================================================
         sudo systemctl status systemd-binfmt.service
@@ -81,7 +80,7 @@ jobs:
       run: |
         file ./test/test_ret_code.exe
         echo =====================================================
-        wine ./test/test_ret_code.exe
+        wine64 ./test/test_ret_code.exe
         echo =====================================================
         ./test/test_ret_code.exe
         echo =====================================================
