@@ -14,10 +14,11 @@ jobs:
       # Set fail-fast to false to ensure that feedback is delivered for all matrix combinations. Consider changing this to true when your workflow is stable.
       fail-fast: false
 
-      # Set up a matrix to run the following 3 configurations:
+      # Set up a matrix to run the following 4 configurations:
       # 1. <Windows, Debug, latest MSVC compiler toolchain on the default runner image, default generator>
       # 2. <Linux, Debug, latest GCC compiler toolchain on the default runner image, default generator>
       # 3. <Linux, Debug, latest Clang compiler toolchain on the default runner image, default generator>
+      # 4. <Linux, Debug, cross-compiling for Windows, default generator>
       #
       # To add more build types (Release, Debug, RelWithDebInfo, etc.) customize the build_type list.
       matrix:
@@ -27,6 +28,8 @@ jobs:
             compiler: g++
           - os: ubuntu-latest
             compiler: clang++
+          - os: ubuntu-latest
+            compiler: x86_64-w64-mingw32-g++-posix
         build_type: [Debug]
 
     steps:
@@ -40,6 +43,13 @@ jobs:
         echo "CXX=${{ matrix.conf.compiler }}" >> "$GITHUB_ENV"
         echo "CMAKE_BUILD_TYPE=${{ matrix.build_type }}" >> "$GITHUB_ENV"
 
+    - name: Set cross-compiling toolchain
+      if: ${{ matrix.conf.compiler == 'x86_64-w64-mingw32-g++-posix' }}
+      run: |
+        sudo apt update
+        sudo apt install --no-install-recommends g++-mingw-w64-x86-64-posix wine-binfmt
+        echo "EXTRA_CMAKE_OPTIONS=-DCMAKE_SYSTEM_NAME=Windows -DCMAKE_EXE_LINKER_FLAGS=-static" >> "$GITHUB_ENV"
+
     - name: Set reusable strings
       # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
       id: strings
@@ -52,6 +62,7 @@ jobs:
       run: >
         cmake -B ${{ steps.strings.outputs.build-output-dir }}
         -DSUBPROCESS_TESTS=ON
+        $EXTRA_CMAKE_OPTIONS
         -S ${{ github.workspace }}
 
     - name: Build
