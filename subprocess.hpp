@@ -1901,14 +1901,14 @@ namespace detail {
     // at all, using select() or threads is unnecessary.
     auto hndls = {stream_->input(), stream_->output(), stream_->error()};
     int count = std::count(std::begin(hndls), std::end(hndls), nullptr);
-    const int len_conv = length;
+    const size_t len_conv{length};
 
     if (count >= 2) {
       OutBuffer obuf;
       ErrBuffer ebuf;
       if (stream_->input()) {
         if (msg) {
-          int wbytes = std::fwrite(msg, sizeof(char), length, stream_->input());
+          const size_t wbytes{std::fwrite(msg, sizeof(char), length, stream_->input())};
           if (wbytes < len_conv) {
             if (errno != EPIPE && errno != EINVAL) {
               throw OSError("fwrite error", errno);
@@ -1965,7 +1965,7 @@ namespace detail {
     OutBuffer obuf;
     ErrBuffer ebuf;
     std::future<int> out_fut, err_fut;
-    const int length_conv = length;
+    const size_t length_conv{length};
 
     if (stream_->output()) {
       obuf.add_cap(out_buf_cap_);
@@ -1985,7 +1985,7 @@ namespace detail {
     }
     if (stream_->input()) {
       if (msg) {
-        int wbytes = std::fwrite(msg, sizeof(char), length, stream_->input());
+        const size_t wbytes{std::fwrite(msg, sizeof(char), length, stream_->input())};
         if (wbytes < length_conv) {
           if (errno != EPIPE && errno != EINVAL) {
             throw OSError("fwrite error", errno);
